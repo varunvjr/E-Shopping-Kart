@@ -1,0 +1,63 @@
+const products=[
+    {
+        id:"1",
+        image:"./images/airpods.jpg",
+        name:"AirPods",
+        description:"Awesome",
+        price:"400",
+        rating:"4.5",
+        reviews:"5",
+        stock:4
+    },
+    {
+        id:"2",
+        image:"./images/alexa.jpg",
+        name:"Alexa",
+        description:"Fast" ,
+        price:"100" ,
+        rating:"4.5",
+        reviews:"5",
+        stock:4
+    },
+    {
+        id:"3",
+        image:"./images/camera.jpg",
+        name:"Camera",
+        description:"Good looking",
+        price:"300",
+        rating:"2.5",
+        reviews:"2",
+        stock:4
+    },
+    {
+        id:"4",
+        image:"./images/mouse.jpg",
+        name:"Mouse",
+        description:"Small",
+        price:"40",
+        rating:"4.5",
+        reviews:"3",
+        stock:4
+    },
+    {
+        id:"5",
+        image:"./images/playstation.jpg",
+        name:"PlayStation",
+        description:"Gaming",
+        price:"4000",
+        rating:"6",
+        reviews:"5",
+        stock:0
+    },
+    {
+        id:"6",
+        image:"./images/phone.jpg",
+        name:"Mobile",
+        description:"Dial Up",
+        price:"2400",
+        rating:"3.5",
+        reviews:"3",
+        stock:4
+    }
+];
+module.exports=products;
