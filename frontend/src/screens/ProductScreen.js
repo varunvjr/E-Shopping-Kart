@@ -13,6 +13,7 @@ const ProductScreen = (props) => {
         }
         fetchProduct();
     },[ID])
+    
     return (
         <>
         <Link className="btn btn-light my-3" to="/">
