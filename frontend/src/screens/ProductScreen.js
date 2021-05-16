@@ -1,25 +1,30 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
  import {Link} from 'react-router-dom';
  import {Row,Col,Image,ListGroup,Card,Button} from 'react-bootstrap';
 import Rating from "../components/Rating";
-import axios from 'axios';
+import {useDispatch,useSelector} from 'react-redux';
+import {listProductsDetails}  from "../actions/productActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 const ProductScreen = (props) => {
+    const dispatch=useDispatch();
     const ID=props.match.params.id;
-    const [product,setProduct]=useState({})
+    const productDetails=useSelector(state=>state.productDetails)
+    const {loading,error,product}=productDetails;
     useEffect(()=>{
-        const fetchProduct=async()=>{
-            const res=await axios.get("http://localhost:5000/api/products/"+ID);
-            setProduct(res.data);
-        }
-        fetchProduct();
-    },[ID])
-    
+       dispatch(listProductsDetails(ID))
+    },[dispatch,ID])
     return (
         <>
         <Link className="btn btn-light my-3" to="/">
              Go Back
         </Link>
-        <Row>
+        {loading?(
+            <Loader/>
+        ):error?(
+            <Message variant='danger'>{error}</Message>
+        ):(
+            <Row>
             <Col md={6}>
                 <Image src={product.image} alt={product.name} fluid/>
             </Col>
@@ -28,7 +33,10 @@ const ProductScreen = (props) => {
                     <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                    <Rating value={product.rating} text={`${product.reviews} reviews`}/>
+                    <Rating value={product.rating} text={`${product.reviews.comment} reviews`}/>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                Rating:{product.rating}
                 </ListGroup.Item>
                 <ListGroup.Item>
                     Price:${product.price}
@@ -65,6 +73,8 @@ const ProductScreen = (props) => {
                 </Card>
             </Col>
         </Row>
+        )}
+       
         </>
     )
 }
