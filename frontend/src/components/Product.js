@@ -14,8 +14,8 @@ const Product = ({product}) => {
              </Link>
              <Card.Title as="h6">
              <Rating 
+                text={product.reviews}
                 value={product.rating} 
-                text={product.reviews+" reviews"}
                 />
              </Card.Title>
              <Card.Title as="div"><i className="fas fa-dollar-sign"></i><strong>{product.price}/-</strong></Card.Title>
