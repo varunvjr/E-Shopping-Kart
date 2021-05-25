@@ -17,10 +17,15 @@ const CartScreen = (props) => {
     const removeFromCartHandler=(id)=>{
         console.log("Product Id",id);
          dispatch(removeFromCart(id))
-
     }
-    const checkOutHanlder=()=>{
-        history.push('/login?redirect=shipping')
+    const checkOutHandler=()=>{
+        const user=localStorage.getItem('userInfo');
+        const userData=JSON.parse(user);
+        if(userData){
+            history.push("/shipping");
+        }else{
+            history.push("/login");
+        }
     }
      const dispatch = useDispatch();
      useEffect(()=>{
@@ -72,7 +77,7 @@ const CartScreen = (props) => {
                                 ${cartItems.reduce((acc,item)=>acc+item.qty*item.price,0).toFixed(2)}
                       </ListGroup.Item>
                       <ListGroup.Item>
-                                <Button type='button' className='btn-block' disabled={cartItems.length===0} onClick={checkOutHanlder}>Checkout</Button>
+                                <Button type='button' className='btn-block' disabled={cartItems.length===0} onClick={checkOutHandler}>Checkout</Button>
                       </ListGroup.Item>
                   </ListGroup>
                                 
