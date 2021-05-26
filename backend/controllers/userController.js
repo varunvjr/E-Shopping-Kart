@@ -10,15 +10,22 @@ import {generateToken}  from "../utils/generateToken.js"
 export const userAuth=asyncHandler( async(req,res)=>{
     const {email,password}=req.body;
     const user=await User.findOne({email});
-    if(user&&(await user.matchPassword(password))){
-        res.json({
-            name:user.name,
-            id:user._id,
-            email:user.email,
-            isAdmin:user.isAdmin,
-            token:generateToken(user._id)
-        })
-    }else{
+    if(user){
+        if(!(await user.matchPassword(password))){
+            res.status(500)
+            throw new Error("Password is incorrect")
+        }
+        else if(user&&(await user.matchPassword(password))){
+            res.json({
+                name:user.name,
+                id:user._id,
+                email:user.email,
+                isAdmin:user.isAdmin,
+                token:generateToken(user._id)
+            })
+        }
+    }
+    else{
         res.status(401)
         throw new Error("User not found");
     }
