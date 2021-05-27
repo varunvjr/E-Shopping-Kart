@@ -1,7 +1,7 @@
 import React from 'react'
 import {LinkContainer} from 'react-router-bootstrap';
 import {Nav,Navbar,Container,NavDropdown} from 'react-bootstrap';
-import {useSelector,useDispatch,useEffect} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {logout} from "../actions/userActions"
 import {useHistory} from 'react-router-dom'
 const Header = () => {
