@@ -1,5 +1,5 @@
 
-import {USER_LOGIN_REQUEST,USER_LOGIN_SUCCESS,USER_LOGIN_FAIL,USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS,USER_DETAILS_FAIL,USER_DETAILS_REQUEST,USER_DETAILS_SUCCESS} from "../constants/userConstants";
+import {USER_LOGIN_REQUEST,USER_LOGIN_SUCCESS,USER_LOGIN_FAIL,USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS,USER_DETAILS_FAIL,USER_DETAILS_REQUEST,USER_DETAILS_SUCCESS,USER_PROFILE_DETAILS_FAIL,USER_PROFILE_DETAILS_REQUEST,USER_PROFILE_DETAILS_SUCCESS,USER_PROFILE_DETAILS_RESET} from "../constants/userConstants";
 import axios from 'axios';
 export const login=(email,password)=>async(dispatch)=>{
     try{
@@ -88,7 +88,7 @@ export const getProfile=(id)=>async(dispatch,getState)=>{
     export const updateProfile=(user)=>async(dispatch,getState)=>{
         try{
             dispatch({
-                type:USER_DETAILS_REQUEST
+                type:USER_PROFILE_DETAILS_REQUEST
             })
             const {userLogin}=getState();
             const {userInfo}=userLogin;
@@ -100,12 +100,12 @@ export const getProfile=(id)=>async(dispatch,getState)=>{
             }
             const {data}=await axios.put(`http://localhost:5000/api/users/profile`,user,config) //body not included  
             dispatch({
-                type:USER_DETAILS_SUCCESS,
+                type:USER_PROFILE_DETAILS_SUCCESS,
                 payload:data
             })
         }catch(error){
             dispatch({
-                type:USER_DETAILS_FAIL,
+                type:USER_PROFILE_DETAILS_FAIL,
                 payload:error.response&&error.response.data.message?error.response.data.message:error.message
             })
         }

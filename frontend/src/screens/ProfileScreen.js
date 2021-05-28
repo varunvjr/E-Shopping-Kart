@@ -18,6 +18,8 @@ const ProfileScreen = () => {
     const {loading,user,error}=userDetails;
     const userLogin=useSelector(state=>state.userLogin);
     const {userInfo}=userLogin;
+    const userProfile=useSelector(state=>state.userProfile);
+    const {success}=userProfile;
     useEffect(()=>{
 
         if(!userInfo.name){
@@ -45,6 +47,7 @@ const ProfileScreen = () => {
             <Col md={2}>
             <h1>Sign In</h1>
             {error&&<Message variant='danger'>{error}</Message>}
+            {success&&<Message variant='success'>User Profile Update</Message>}
             {message&&<Message variant='warning'>{message}</Message>}
             {loading&&(<Loader/>)}
     
