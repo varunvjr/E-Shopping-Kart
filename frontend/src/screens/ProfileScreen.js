@@ -21,7 +21,6 @@ const ProfileScreen = () => {
     const userProfile=useSelector(state=>state.userProfile);
     const {success}=userProfile;
     useEffect(()=>{
-
         if(!userInfo.name){
             history.push("/login")
         }else{
@@ -30,9 +29,10 @@ const ProfileScreen = () => {
             }else{
                 setName(user.name);
                 setEmail(user.email);
+                localStorage.setItem('userInfo',JSON.stringify(user));
             }
         }
-    },[user,userInfo,history,userDetails,dispatch])
+    },[user,userInfo,history,dispatch])
     function submitHandler(e){
         console.log("Form submitted");
         e.preventDefault();

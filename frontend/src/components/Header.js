@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import {LinkContainer} from 'react-router-bootstrap';
 import {Nav,Navbar,Container,NavDropdown} from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
@@ -9,6 +9,8 @@ const Header = () => {
    const history=useHistory();
    const userInfo=localStorage.getItem('userInfo')
    const userData=JSON.parse(userInfo)
+  useEffect(()=>{
+  },[userInfo])
   const logoutHandler=()=>{
      dispatch(logout());
      history.push("/");

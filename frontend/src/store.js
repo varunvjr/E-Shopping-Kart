@@ -15,9 +15,13 @@ const reducer=combineReducers({
 });
 const cartItemsFromLocalStorage=localStorage.getItem('cartItems')?JSON.parse(localStorage.getItem('cartItems')):[]
 const userInfoFromLocalStorage=localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{}
+const shippingAddressFromStorage=localStorage.getItem('shippingAddress')?JSON.parse(localStorage.getItem('shippingAddress')):{}
+const paymentMethodFromStorage=localStorage.getItem('paymentMethod')?JSON.parse(localStorage.getItem('paymentMethod')):{}
 const initailState={
     cart:{
-        cartItems:cartItemsFromLocalStorage
+        cartItems:cartItemsFromLocalStorage,
+        shippingAddress:shippingAddressFromStorage,
+        paymentMethod:paymentMethodFromStorage
     },
     userLogin:{
         userInfo:userInfoFromLocalStorage
