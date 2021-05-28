@@ -37,7 +37,7 @@ const ProfileScreen = () => {
         if(password!==confirmPassword){
             setMessage("Passwords do not match");
         }else{
-            dispatch(updateProfile(name,email,password));
+            dispatch(updateProfile({id:user._id,name,email,password}));
         }
     }
     return (
