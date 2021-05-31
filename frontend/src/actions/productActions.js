@@ -20,11 +20,10 @@ export const listProducts=()=>async(dispatch)=>{
 export const listProductsDetails=(id)=>async(dispatch)=>{
     try{
         dispatch({type:PRODUCT_DETAILS_REQUEST})
-        const res=await axios.get(`http://localhost:5000/api/products/${id}`);
-        const productData=res.data;
+        const {data}=await axios.get(`http://localhost:5000/api/products/${id}`);
         dispatch({
             type:PRODUCT_DETAILS_SUCCESS,
-            payload:productData
+            payload:data
         })
     }catch(error){
         dispatch({type:PRODUCT_DETAILS_FAIL,

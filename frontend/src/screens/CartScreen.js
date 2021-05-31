@@ -6,13 +6,16 @@ import {addToCart,removeFromCart} from "../actions/cartActions";
 import {useDispatch,useSelector} from 'react-redux'; 
 
 const CartScreen = (props) => {
+
     const productId=props.match.params.id;
+    const cart=useSelector(state=>state.cart);
+    const {cartItems}=cart;
+    
     const location=useLocation();
     const history=useHistory();
     const qty=location.search?Number(location.search.split("=")[1]):1;
     console.log("Qty",qty);
-    const cart=useSelector(state=>state.cart);
-    const {cartItems}=cart;
+ 
     console.log("Cart Items",cartItems);
     const removeFromCartHandler=(id)=>{
         console.log("Product Id",id);
