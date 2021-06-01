@@ -1,12 +1,24 @@
-import React,{useState} from 'react'
+// eslint-disable-next-line
+import React,{useState,useEffect} from 'react'
 import {Button,Row,Col,ListGroup,Image,Card} from "react-bootstrap";
 import {useSelector,useDispatch} from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
+import {createOrder} from "../actions/orderActions"
 
 const PlaceOrderScreen = () => {
+    const history=useHistory();
+    const dispatch=useDispatch();
     const cart=useSelector(state=>state.cart);
+    const orderCreate=useSelector(state=>state.orderCreate);
+    // eslint-disable-next-line
+    const {order,loading,success,error}=orderCreate;
+    useEffect(() => {
+        if(success){
+            history.push(`/order/${order._id}`)
+        }
+    }, [success,history,order])
     const {cartItems}=cart;
     cart.ItemsPrice=cartItems.reduce((acc,item)=>acc+item.price*item.qty,0);
     cart.totalItems=cartItems.reduce((acc,items)=>acc+items.qty,0);
@@ -14,7 +26,15 @@ const PlaceOrderScreen = () => {
     cart.taxPrice=cartItems.price>100?cart.ItemsPrice*0.1:cart.ItemsPrice*0.20;
     cart.totalPrice=cart.shippingPrice+cart.taxPrice+cart.ItemsPrice;
     const placeOrder=()=>{
-        console.log("Order Placed")
+        dispatch(createOrder({
+            orderItems:cart.cartItems,
+            shippingAddress:cart.shippingAddress,
+            paymentMethod:cart.paymentMethod,
+            itemsPrice:cart.ItemsPrice,
+            shippingPrice:cart.shippingPrice,
+            taxPrice:cart.taxPrice,
+            totalPrice:cart.totalPrice
+        }))
     }
     return (
         <div>
@@ -97,6 +117,9 @@ const PlaceOrderScreen = () => {
                                         <Col>Total</Col>
                                         <Col>${cart.totalPrice}/-</Col>
                                         </Row>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item>
+                                        {error&&<Message variant="danger">{error}</Message>}
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Button type="button" className="btn-block" disabled={cart.cartItems===0} onClick={placeOrder}>Place Order</Button>
