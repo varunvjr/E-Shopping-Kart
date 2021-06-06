@@ -34,6 +34,15 @@ const PaymentScreen = () => {
                     onChange={(e)=>setPaymentMehod(e.target.value)}
                 ></Form.Check>
             </Col>
+            <Col>
+                <Form.Check
+                    type='radio'
+                    label='Stripe or Credit Card'
+                    name='Stripe'
+                    value='Stripe'
+                    onChange={(e)=>setPaymentMehod(e.target.value)}
+                ></Form.Check>
+            </Col>
                 </Row>
             </Form.Group> <br/>
            

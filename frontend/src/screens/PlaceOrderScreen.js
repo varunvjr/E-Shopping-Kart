@@ -35,6 +35,7 @@ const PlaceOrderScreen = () => {
             taxPrice:cart.taxPrice,
             totalPrice:cart.totalPrice
         }))
+        
     }
     return (
         <div>
@@ -55,7 +56,7 @@ const PlaceOrderScreen = () => {
                         <ListGroup.Item>
                             <h2>Payment Method</h2>
                             <strong>Method:</strong>
-                            PayPal <i class="fab fa-cc-paypal"></i> 
+                            {cart.paymentMethod} 
                         </ListGroup.Item>
                     </ListGroup>
                     <ListGroup>
@@ -65,9 +66,10 @@ const PlaceOrderScreen = () => {
                             <Row>
                                 <Col md={8}>
                                 {cartItems.map((item,index)=>(
+                                    
                                     <ListGroup.Item key={index}>
                                          <Row>
-                                             <Col md={1}>
+                                             <Col md={2}>
                                                  <Image src={item.image} fluid rounded alt={item.name}/>
                                              </Col>
                                              <Col>

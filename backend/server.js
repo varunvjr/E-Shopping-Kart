@@ -19,11 +19,16 @@ app.use(cors());
 app.get("/",(req,res)=>{
     res.send("Backend")
 })
+
 app.use("/api/products",productRouter);
 app.use("/api/users",userRouter);
 app.use("/api/orders",orderRouter);
+app.get("/api/config/paypal",(req,res)=>{res.status(200).json({
+    clientId:process.env.PAYPAL_CLIENT_ID
+})})
 app.use(notFound);
 app.use(errorHandler);
+
 
 app.listen(PORT,()=>{
     console.log(`Server running in ${process.env.NODE_ENV} on port:${PORT}`.yellow.bold);
