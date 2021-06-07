@@ -1,51 +1,39 @@
 // eslint-disable-next-line
-import React,{useState,useEffect} from 'react'
-import {Row,Col,ListGroup,Image,Card} from "react-bootstrap";
+import React,{useState,useEffect,useRef} from 'react'
+import {Row,Col,ListGroup,Image,Card,Button} from "react-bootstrap";
 import {useSelector,useDispatch} from "react-redux";
 import Message from "../components/Message";
-import {PayPalButton} from 'react-paypal-button-v2';
 import axios from 'axios';
 import Loader from "../components/Loader";
+import {toast} from "react-toastify"
+import StripeCheckoutProps from "react-stripe-checkout"
 import {Link} from 'react-router-dom';
 import {getOrderDetails,payOrder} from "../actions/orderActions"
 import {ORDER_PAY_RESET} from "../constants/orderConstants";
 const OrderScreen = (props) => {
+    const [stripeId,setStripeId]=useState();
+    
     const cart=useSelector(state=>state.cart);
     const {paymentMethod}=cart;
     const orderDetails=useSelector(state=>state.orderDetails)
     const {order,loading,error}=orderDetails;
     const orderPay=useSelector(state=>state.orderPay)
     const {loading:loadingPay,success:successPay}=orderPay;
-
+    toast.configure();
     const dispatch=useDispatch();
     const orderId=props.match.params.id;
-    const [sdkReady,setSdkReady]=useState(false)
-    useEffect(()=>{
-        const addPayPalScript=async()=>{
-            const {data}=await axios.get("http://localhost:5000/api/config/paypal")
+        useEffect(()=>{
+        const addStripeScript=async()=>{
+            const {data}=await axios.get("http://localhost:5000/api/config/stripe")
             const {clientId}=data;
-            const script=document.createElement('script');
-            script.type='text/javascript';
-            script.src=`https://www.paypal.com/sdk/js?client-id=${clientId}`
-            script.async=true;
-            script.onload=()=>{
-                setSdkReady(true);
-            }
-            document.body.appendChild(script);
+            setStripeId(clientId);
         }
        
-        
         if(!order||successPay){
             dispatch({type:ORDER_PAY_RESET})
             dispatch(getOrderDetails(orderId))
-        }else if(!order.isPaid){
-            if(!window.paypal){
-                addPayPalScript();
-            }else{
-                setSdkReady(true);
-            }
         }
-        addPayPalScript();
+        addStripeScript();
        },[orderId,dispatch,order,successPay])
 
     
@@ -53,14 +41,21 @@ const OrderScreen = (props) => {
         order.totalItems=order.orderItems.reduce((acc,items)=>acc+items.qty,0)
     }   
    
-    
+    const handleToken=async(token,addresses)=>{
+        const paymentResult={
+            id:orderId,
+            status:"success",
+            update_time:Date.now(),
+            email_address:token.email
+
+        }
+        if(paymentResult.status==="success"&&stripeId){
+            dispatch(payOrder(orderId,paymentResult));
+        }
+       
+    }
   
     // eslint-disable-next-line
-   
-    const successPaymentHandler=(paymentResult)=>{
-        console.log(paymentResult);
-        dispatch(payOrder(orderId,paymentResult))
-    }
     
     return loading?<Loader/>:error?<Message variant='danger'>{error}</Message>:<div>
         <h1>Order {order._id}</h1>
@@ -153,12 +148,11 @@ const OrderScreen = (props) => {
                                     <Col>${order.totalPrice}/-</Col>
                                     </Row>
                                 </ListGroup.Item>
+
                                 {!order.isPaid&&(
                                     <ListGroup.Item>
                                         {loadingPay&&<Loader/>}
-                                        {!sdkReady?<Loader/>:(
-                                            <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}/>
-                                        )}
+                                        <StripeCheckoutProps stripeKey={stripeId} billingAddress={order.shippingAddress.address} token={handleToken} amount={order.totalPrice*100} name="Ekart" /> 
                                     </ListGroup.Item>
                                 )}
                             </ListGroup>
