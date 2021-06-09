@@ -3,6 +3,7 @@ import {USER_LOGIN_REQUEST,USER_LOGIN_SUCCESS,USER_LOGIN_FAIL,USER_LOGOUT, USER_
      USER_REGISTER_SUCCESS,USER_DETAILS_FAIL,USER_DETAILS_REQUEST,USER_DETAILS_SUCCESS,USER_PROFILE_DETAILS_FAIL,USER_PROFILE_DETAILS_REQUEST,USER_PROFILE_DETAILS_SUCCESS} from "../constants/userConstants";
 import axios from 'axios';
 import {ORDER_LIST_MY_RESET} from "../constants/orderConstants"
+import {CART_RESET_ITEM} from "../constants/cartConstants"
 export const login=(email,password)=>async(dispatch)=>{
     try{
        dispatch({
@@ -28,11 +29,15 @@ export const login=(email,password)=>async(dispatch)=>{
 }
 export const logout=()=>async(dispatch)=>{
     localStorage.removeItem("userInfo");
+    localStorage.removeItem("cartItems");
     dispatch({
         type:ORDER_LIST_MY_RESET
     })
     dispatch({
         type:USER_PROFILE_DETAILS_RESET
+    })
+    dispatch({
+        type:CART_RESET_ITEM
     })
     dispatch({
         type:USER_LOGOUT
