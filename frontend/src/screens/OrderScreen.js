@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React,{useState,useEffect,useRef} from 'react'
-import {Row,Col,ListGroup,Image,Card,Button} from "react-bootstrap";
+import {Row,Col,ListGroup,Image,Card} from "react-bootstrap";
 import {useSelector,useDispatch} from "react-redux";
 import Message from "../components/Message";
 import axios from 'axios';
@@ -22,6 +22,7 @@ const OrderScreen = (props) => {
     toast.configure();
     const dispatch=useDispatch();
     const orderId=props.match.params.id;
+    console.log("Order id",orderId);
         useEffect(()=>{
         const addStripeScript=async()=>{
             const {data}=await axios.get("http://localhost:5000/api/config/stripe")
