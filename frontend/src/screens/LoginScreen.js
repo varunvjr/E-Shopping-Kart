@@ -18,12 +18,11 @@ const LoginScreen = () => {
     const userLogin=useSelector(state=>state.userLogin);
     const {loading,userInfo,error}=userLogin;
     useEffect(()=>{
-            const user=localStorage.getItem('userInfo');
-            const userData=JSON.parse(user);
-            if(userData){
+            const {userInfo}=userLogin;
+            if(userInfo){
                 history.push("/");
              }
-    },[userInfo,redirect,history]); 
+    },[userInfo,history,redirect,userLogin]); 
     function submitHandler(e){
         e.preventDefault();
         dispatch(login(email,password));

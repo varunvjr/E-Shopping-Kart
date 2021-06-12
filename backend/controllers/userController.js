@@ -110,3 +110,12 @@ export const updateUserProfile=asyncHandler(async(req,res)=>{
         throw new Error("Invalid email or password");
     }
 })
+
+//@desc GET all users
+//@route GET/api/users
+//@access Private
+
+export const getAllUsers=asyncHandler(async(req,res)=>{
+    const users=await User.find({})
+    res.status(200).json(users);
+})
