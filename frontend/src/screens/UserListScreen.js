@@ -5,7 +5,7 @@ import Message from "../components/Message";
 import {useHistory} from "react-router"
 import Loader from "../components/Loader"; 
 import {Table,Button} from "react-bootstrap";
-import {getAllUsers} from "../actions/userActions"
+import {getAllUsers,deleteUser} from "../actions/userActions"
 const UserListScreen = () => {
     const history=useHistory();
     const dispatch=useDispatch();
@@ -13,6 +13,8 @@ const UserListScreen = () => {
     const {userInfo}=userLogin;
     const usersList=useSelector(state=>state.usersList);
     const {loading,users,error}=usersList;
+    const userDelete=useSelector(state=>state.userDelete);
+    const {success:deleteSuccess}=userDelete;
     useEffect(()=>{
         if(userInfo&&userInfo.isAdmin){
             dispatch(getAllUsers())
@@ -20,9 +22,11 @@ const UserListScreen = () => {
             history.push("/login");
         }
         
-    },[dispatch,history,userInfo])
+    },[dispatch,history,userInfo,deleteSuccess])
     const deleteHandler=(id)=>{
-        console.log("User id",id)
+        if(window.confirm('Are you sure?')){
+            dispatch(deleteUser(id));
+        }
     }
     return (
         <div>
@@ -44,7 +48,7 @@ const UserListScreen = () => {
                             <LinkContainer to={`/user/${user._id}/edit`}>
                                 <Button variant='light' className='btn-sm'><i className="fas fa-edit"></i></Button>
                             </LinkContainer>
-                            <Button variant='danger' className='btn-sm' onClick={deleteHandler(user._id)}><i className='fas fa-trash'></i></Button>
+                            <Button variant='danger' className='btn-sm' onClick={()=>{deleteHandler(user._id)}}><i className='fas fa-trash'></i></Button>
                           </td>
                           </tr>  
                         ))}
