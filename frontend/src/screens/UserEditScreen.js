@@ -79,7 +79,6 @@ const UserEditScreen = (props) => {
             <Form.Check
             
             type="checkbox"
-            required
             label="Is Admin"
             checked={isAdmin}
             onChange={(e)=>{setIsAdmin(e.target.checked)}}>

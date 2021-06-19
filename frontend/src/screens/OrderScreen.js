@@ -22,7 +22,6 @@ const OrderScreen = (props) => {
     toast.configure();
     const dispatch=useDispatch();
     const orderId=props.match.params.id;
-    console.log("Order id",orderId);
         useEffect(()=>{
         const addStripeScript=async()=>{
             const {data}=await axios.get("http://localhost:5000/api/config/stripe")

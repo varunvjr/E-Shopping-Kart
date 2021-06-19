@@ -29,8 +29,10 @@ const ProfileScreen = () => {
         if(!userInfo.name){
             history.push("/login")
         }else{
+            console.log("Hi");
             if(!user.name){
-                dispatch(getProfile('/profile'))
+                console.log("Hello");
+                dispatch(getProfile('profile'))
                 dispatch(listMyOrders());
 
             }else{

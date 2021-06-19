@@ -69,6 +69,7 @@ export const registerUser=asyncHandler(async(req,res)=>{
 //@access Private
 
 export const getUserProfile=asyncHandler(async(req,res)=>{
+    console.log(req.user);
     const user=await User.findOne(req.user._id);
     if(user){
         res.json({
