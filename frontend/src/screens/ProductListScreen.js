@@ -5,15 +5,15 @@ import Message from "../components/Message";
 import {useHistory} from "react-router"
 import Loader from "../components/Loader"; 
 import {Table,Button,Row,Col} from "react-bootstrap";
-import {listProducts} from "../actions/productActions"
+import {listProducts,deleteProduct} from "../actions/productActions"
 const ProductListScreen = () => {
     const history=useHistory();
     const dispatch=useDispatch();
     const userLogin=useSelector(state=>state.userLogin);
-    const userDetails=useSelector(state=>state.userDetails);
     const productList=useSelector(state=>state.productList);
-    const {loading,error}=userDetails;
+    const productDelete=useSelector(state=>state.productDelete);
     const {loading:productLoading,error:productError,products}=productList;
+    const {loading:deleteLoading,success:deleteSuccess,error:deleteError}=productDelete;
     const {userInfo}=userLogin;
     useEffect(()=>{
         if(userInfo&&userInfo.isAdmin){
@@ -22,9 +22,10 @@ const ProductListScreen = () => {
             history.push("/login");
         }
         
-    },[dispatch,history,userInfo])
+    },[dispatch,history,userInfo,deleteSuccess])
     const deleteHandler=(id)=>{
         if(window.confirm('Are you sure?')){
+            dispatch(deleteProduct(id));
         }
     }
     const createProductHandler=()=>{
@@ -42,9 +43,9 @@ const ProductListScreen = () => {
         </Row>
         <Row>
         <br/>
-        {productLoading&&<Loader/>}
-        {productError&&<Message variant='danger'>{productError}</Message>}
-        {loading?(<Loader/>):error?(<Message variant="danger">{error}</Message>):(
+        {deleteLoading&&<Loader/>}
+        {deleteError&&<Message variant='danger'>{deleteError}</Message>}
+        {productLoading?(<Loader/>):productError?(<Message variant="danger">{productError}</Message>):(
             <Table striped bordered hover responsive className="table-sm">
                 <thead>
                     <tr>
