@@ -29,3 +29,53 @@ export const deleteProductById=asyncHandler(async(req,res)=>{
         throw new Error("Product not found")
     }
 })
+
+export const createProduct=asyncHandler(async(req,res)=>{
+    const product=new Product({
+        name:'Sample name',
+        price:200,
+        user:req.user._id,
+        image:'/images/sample.jpg',
+        brand:'Sample brand',
+        category:'Sample Category',
+        stock:'0',
+        reviews:0,
+        rating:4.5,
+        description:'Sample Description'
+    })
+    const createdProduct=await product.save();
+    res.status(201).json(createdProduct);
+})
+
+export const updateProduct=asyncHandler(async(req,res)=>{
+    const {
+        name,
+        price,
+        user,
+        image,
+        brand,
+        category,
+        stock,
+        reviews,
+        description
+    }=req.body;
+    const product=await Product.findById(req.params.id);
+    if(product){
+        product.name=name,
+        product.price=price,
+        product.user=user,
+        product.image=image,
+        product.brand=brand,
+        product.category=category,
+        product.stock=stock,
+        product.reviews=reviews,
+        product.description=description
+        const updatedProduct=await product.save();
+        res.status(201).json(updatedProduct);
+    }else{
+        res.status(401);
+        throw new Error("Product not found")
+    }
+  
+
+})

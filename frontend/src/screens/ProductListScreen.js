@@ -5,31 +5,39 @@ import Message from "../components/Message";
 import {useHistory} from "react-router"
 import Loader from "../components/Loader"; 
 import {Table,Button,Row,Col} from "react-bootstrap";
-import {listProducts,deleteProduct} from "../actions/productActions"
+import {listProducts,deleteProduct,createProduct} from "../actions/productActions"
+import {PRODUCT_CREATE_RESET} from "../constants/productConstants"
 const ProductListScreen = () => {
     const history=useHistory();
     const dispatch=useDispatch();
     const userLogin=useSelector(state=>state.userLogin);
     const productList=useSelector(state=>state.productList);
     const productDelete=useSelector(state=>state.productDelete);
+    const productCreate=useSelector(state=>state.productCreate);
+    const {loading:createLoading,error:createError,success:createSuccess,createdProduct}=productCreate;
     const {loading:productLoading,error:productError,products}=productList;
     const {loading:deleteLoading,success:deleteSuccess,error:deleteError}=productDelete;
     const {userInfo}=userLogin;
     useEffect(()=>{
-        if(userInfo&&userInfo.isAdmin){
-            dispatch(listProducts())
-        }else{
+        dispatch({type:PRODUCT_CREATE_RESET})
+        if(!userInfo.isAdmin){
             history.push("/login");
+        }else{
+            if(createSuccess){
+                history.push(`/admin/product/${createdProduct._id}/edit`);
+            }else{
+                dispatch(listProducts())
+            }
         }
         
-    },[dispatch,history,userInfo,deleteSuccess])
+    },[dispatch,history,userInfo,deleteSuccess,createSuccess,createdProduct])
     const deleteHandler=(id)=>{
         if(window.confirm('Are you sure?')){
             dispatch(deleteProduct(id));
         }
     }
     const createProductHandler=()=>{
-        console.log("Create product")
+        dispatch(createProduct());
     }
     return (
         <div>
@@ -45,6 +53,8 @@ const ProductListScreen = () => {
         <br/>
         {deleteLoading&&<Loader/>}
         {deleteError&&<Message variant='danger'>{deleteError}</Message>}
+        {createLoading&&<Loader/>}
+        {createError&&<Message variant='danger'>{createError}</Message>}
         {productLoading?(<Loader/>):productError?(<Message variant="danger">{productError}</Message>):(
             <Table striped bordered hover responsive className="table-sm">
                 <thead>
