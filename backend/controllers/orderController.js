@@ -1,7 +1,5 @@
-import e from 'express';
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
-
 //@desc create order
 //@route POST /api/orders
 //@access Private 
@@ -67,4 +65,17 @@ export const updateOrderToPaid=asyncHandler(async(req,res)=>{
 export const getMyOrders=asyncHandler(async(req,res)=>{
     const orders=await Order.find({user:req.user._id})
     res.json(orders);
+})
+
+//@desc GET all orders
+//@route GET /api/orders
+//@access Private/Admin
+
+export const getOrders=asyncHandler(async(req,res)=>{
+    const allOrders=await Order.find({}).populate('user','id name');
+    if(allOrders){
+        res.status(200).json(allOrders);
+    }else{
+        throw new Error("Orders not found")
+    }
 })
