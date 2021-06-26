@@ -34,7 +34,7 @@ const OrderScreen = (props) => {
             dispatch(getOrderDetails(orderId))
         }
         addStripeScript();
-       },[orderId,dispatch,order,successPay])
+       },[orderId,dispatch,order,successPay,loading])
 
     
     if(!loading){
@@ -85,7 +85,7 @@ const OrderScreen = (props) => {
                         <strong>Method:</strong>
                         {paymentMethod} 
                         </p>
-                       {order.isPaid?<Message variant='success'>Paid on :{order.paidAt}</Message>:<Message variant='danger'>Not Paid</Message>}
+                       {order.isPaid?<Message variant='success'>Paid on :{order.paidAt.substring(0,10)}</Message>:<Message variant='danger'>Not Paid</Message>}
                     </ListGroup.Item>
                 </ListGroup>
                 <ListGroup>
