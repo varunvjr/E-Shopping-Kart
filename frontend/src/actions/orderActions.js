@@ -1,4 +1,4 @@
-import {ORDER_CREATE_REQUEST,ORDER_CREATE_SUCCESS,ORDER_CREATE_FAIL,ORDER_DETAILS_REQUEST,
+import {ORDER_CREATE_REQUEST,ORDER_CREATE_SUCCESS,ORDER_CREATE_FAIL,ORDER_DETAILS_REQUEST,ORDER_UPDATE_REQUEST,ORDER_UPDATE_SUCCESS,ORDER_UPDATE_FAIL,
     ORDER_DETAILS_SUCCESS,ORDER_DETAILS_FAIL,ORDER_PAY_REQUEST,ORDER_PAY_SUCCESS,ORDER_PAY_FAIL,
     ORDER_LIST_MY_REQUEST,ORDER_LIST_MY_SUCCESS,ORDER_LIST_MY_FAIL,ORDER_LIST_FAIL,ORDER_LIST_REQUEST,ORDER_LIST_SUCCESS} from "../constants/orderConstants";
 import axios from 'axios';
@@ -129,6 +129,30 @@ export const listAllOrders=()=>async(dispatch,getState)=>{
     }catch(error){
         dispatch({
             type:ORDER_LIST_FAIL,
+            payload:error.response&&error.response.data.message?error.response.data.message:error.message
+        })
+    }
+}
+export const updateOrderToDelivered=(id)=>async(dispatch,getState)=>{
+    try{
+        dispatch({
+            type:ORDER_UPDATE_REQUEST
+        })
+        const {userLogin}=getState();
+        const {userInfo}=userLogin;
+        const config={
+            headers:{
+                 Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+        await axios.put(`http://localhost:5000/api/orders/${id}/deliver`,{},config)
+        dispatch({
+            type:ORDER_UPDATE_SUCCESS,
+        })
+
+    }catch(error){
+        dispatch({
+            type:ORDER_UPDATE_FAIL,
             payload:error.response&&error.response.data.message?error.response.data.message:error.message
         })
     }

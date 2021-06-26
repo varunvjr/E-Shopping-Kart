@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React,{useState,useEffect,useRef} from 'react'
-import {Row,Col,ListGroup,Image,Card} from "react-bootstrap";
+import {Row,Col,ListGroup,Image,Card,Button} from "react-bootstrap";
 import {useSelector,useDispatch} from "react-redux";
 import Message from "../components/Message";
 import axios from 'axios';
@@ -8,11 +8,14 @@ import Loader from "../components/Loader";
 import {toast} from "react-toastify"
 import StripeCheckoutProps from "react-stripe-checkout"
 import {Link} from 'react-router-dom';
-import {getOrderDetails,payOrder} from "../actions/orderActions"
-import {ORDER_PAY_RESET} from "../constants/orderConstants";
+import {getOrderDetails,payOrder,updateOrderToDelivered} from "../actions/orderActions"
+import {ORDER_PAY_RESET,ORDER_UPDATE_RESET} from "../constants/orderConstants";
 const OrderScreen = (props) => {
     const [stripeId,setStripeId]=useState();
-    
+    const orderDeliver=useSelector(state=>state.orderDeliver);
+    const {loading:deliverLoading,success:deliverSuccess,error:deliverError}=orderDeliver;
+    const userLogin=useSelector(state=>state.userLogin);
+    const {userInfo}=userLogin;
     const cart=useSelector(state=>state.cart);
     const {paymentMethod}=cart;
     const orderDetails=useSelector(state=>state.orderDetails)
@@ -34,7 +37,7 @@ const OrderScreen = (props) => {
             dispatch(getOrderDetails(orderId))
         }
         addStripeScript();
-       },[orderId,dispatch,order,successPay,loading])
+       },[orderId,dispatch,order,successPay,loading,deliverLoading])
 
     
     if(!loading){
@@ -53,6 +56,10 @@ const OrderScreen = (props) => {
             dispatch(payOrder(orderId,paymentResult));
         }
        
+    }
+    const deliverHandler=(id)=>{
+        dispatch({type:ORDER_UPDATE_RESET})
+        dispatch(updateOrderToDelivered(id));
     }
   
     // eslint-disable-next-line
@@ -157,7 +164,17 @@ const OrderScreen = (props) => {
                                 )}
                             </ListGroup>
                         </Card>
-                        </Col>  
+                        <ListGroup.Item>
+                        {deliverLoading&&<Loader/>}
+                        {deliverError&&<Message variant='danger'>{deliverError}</Message>}
+                        {userInfo.isAdmin&&!order.isDelivered&&(
+                            <Button onClick={()=>{deliverHandler(order._id)}} className="btn btn-block">Mark as Delivered</Button>
+                        )}
+                        </ListGroup.Item>
+
+                       
+                        </Col> 
+
         </Row>   
     </div>
     </div>
