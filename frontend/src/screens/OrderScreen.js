@@ -26,6 +26,9 @@ const OrderScreen = (props) => {
     const dispatch=useDispatch();
     const orderId=props.match.params.id;
         useEffect(()=>{
+        if(deliverSuccess){
+            window.location.reload(false);
+        }
         const addStripeScript=async()=>{
             const {data}=await axios.get("http://localhost:5000/api/config/stripe")
             const {clientId}=data;
@@ -37,7 +40,7 @@ const OrderScreen = (props) => {
             dispatch(getOrderDetails(orderId))
         }
         addStripeScript();
-       },[orderId,dispatch,order,successPay,loading,deliverLoading])
+       },[orderId,dispatch,order,successPay,loading,deliverSuccess])
 
     
     if(!loading){
@@ -82,7 +85,7 @@ const OrderScreen = (props) => {
                             {order.shippingAddress.address},{order.shippingAddress.city},
                             {order.shippingAddress.postalCode},{order.shippingAddress.country}
                         </p>
-                        {order.isDelivered?<Message variant='success'>Delivered :{order.paidAt}</Message>:<Message variant='danger'>Not Delivered</Message>}
+                        {order.isDelivered?<Message variant='success'>Delivered :{order.paidAt.substring(0,10)}</Message>:<Message variant='danger'>Not Delivered</Message>}
                      </ListGroup.Item>
                 </ListGroup>
                 <ListGroup>
