@@ -1,22 +1,29 @@
 import mongoose from 'mongoose';
 
-// const reviewSchema=mongoose.Schema({
-//     name:{
-//         type:String,
-//         required:true
-//     },
-//     rating:{
-//         type:Number,
-//         required:true,
-//         default:0
-//     },
-//     comment:{
-//         type:String,
-//         required:true
-//     }
-// },{
-//     timestamps:true
-// })
+const reviewSchema=mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+        default:"Good Product"
+    },
+    rating:{
+        type:Number,
+        required:true,
+        default:0
+    },
+    comment:{
+        type:String,
+        required:true,
+        default:"Ok"
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"User"
+    }
+},{
+    timestamps:true
+})
 
 const productSchema=mongoose.Schema({
     user:{
@@ -41,9 +48,9 @@ const productSchema=mongoose.Schema({
         required:true,
         default:0
     },
+    totalreviews:[reviewSchema],
     reviews:{
         type:Number,
-        required:true,
         default:0
     },
     category:{
@@ -59,7 +66,7 @@ const productSchema=mongoose.Schema({
         required:true,
         default:0
     },
-    countInStock:{
+    stock:{
         type:Number,
         required:true,
         default:0

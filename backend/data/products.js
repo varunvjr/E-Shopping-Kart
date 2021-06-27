@@ -17,7 +17,7 @@ const products=[
         price:100,
         rating:4.5,
         reviews:5,
-        stock:4,
+        stock:20,
         category:"Electronics",
         brand:"Amazon"
     },

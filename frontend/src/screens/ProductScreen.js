@@ -1,24 +1,35 @@
-import React,{useState,useEffect} from 'react'
- import {Link} from 'react-router-dom';
- import {Row,Col,Image,ListGroup,Card,Button} from 'react-bootstrap';
+import React,{useEffect,useState} from 'react'
+ import {Link,useHistory} from 'react-router-dom';
+ import {Row,Col,Image,ListGroup,Card,Button,Form} from 'react-bootstrap';
 import Rating from "../components/Rating";
-import axios from 'axios';
+import {useDispatch,useSelector} from 'react-redux';
+import {listProductsDetails}  from "../actions/productActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 const ProductScreen = (props) => {
+    const dispatch=useDispatch();
     const ID=props.match.params.id;
-    const [product,setProduct]=useState({})
+    const productDetails=useSelector(state=>state.productDetails)
+    const {loading,error,product}=productDetails;
     useEffect(()=>{
-        const fetchProduct=async()=>{
-            const res=await axios.get("http://localhost:5000/api/products/"+ID);
-            setProduct(res.data);
-        }
-        fetchProduct();
-    },[ID])
+       dispatch(listProductsDetails(ID))
+    },[dispatch,ID])
+    const [qty,setQty]=useState(1);
+    const history=useHistory();
+    const addToCartHandler=()=>{
+        history.push(`/cart/${ID}?qty=${qty}`)
+    }
     return (
         <>
         <Link className="btn btn-light my-3" to="/">
              Go Back
         </Link>
-        <Row>
+        {loading?(
+            <Loader/>
+        ):error?(
+            <Message variant='danger'>{error}</Message>
+        ):(
+            <Row>
             <Col md={6}>
                 <Image src={product.image} alt={product.name} fluid/>
             </Col>
@@ -28,6 +39,9 @@ const ProductScreen = (props) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                     <Rating value={product.rating} text={`${product.reviews} reviews`}/>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                Rating:{product.rating}
                 </ListGroup.Item>
                 <ListGroup.Item>
                     Price:${product.price}
@@ -55,15 +69,31 @@ const ProductScreen = (props) => {
                         </Col>
                     </Row>
                     </ListGroup.Item>
+                    {product.stock>0&&(
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Qty</Col>
+                                <Col>   
+                                    <Form.Control as='select' value={qty} onChange={(e)=>{setQty(e.target.value)}}>
+                                    {[...Array(product.stock).keys()].map(x=>(
+                                        <option key={x+1} value={x+1}>{x+1}</option>
+                                    ))}
+                                    </Form.Control>
+                                   
+                                </Col>
+                            </Row>
+                        </ListGroup.Item>
+                    )}
                     <ListGroup.Item>
-                        
-                        <Button  type="button" className="btn btn-block" disabled={product.stock===0}>Add to Cart</Button>
+                        <Button onClick={addToCartHandler}  type="button" className="btn btn-block" disabled={product.stock===0}>Add to Cart</Button>
                     </ListGroup.Item>
                     </ListGroup>
                     
                 </Card>
             </Col>
         </Row>
+        )}
+       
         </>
     )
 }
