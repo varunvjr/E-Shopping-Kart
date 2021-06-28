@@ -4,6 +4,7 @@ import {Nav,Navbar,Container,NavDropdown} from 'react-bootstrap';
 import {useDispatch,useSelector} from 'react-redux';
 import {logout} from "../actions/userActions"
 import {useHistory} from 'react-router-dom'
+import SearchBox from "../components/SearchBox";
 const Header = () => {
    const dispatch = useDispatch();
    const history=useHistory();
@@ -23,9 +24,11 @@ const Header = () => {
        
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
+       
           <Nav
             className="links"
           >
+          <SearchBox/>
             <LinkContainer to="/cart">
             <Nav.Link><i className="fas fa-shopping-cart"></i>Cart</Nav.Link>
             </LinkContainer>
