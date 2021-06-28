@@ -6,6 +6,7 @@ import {useDispatch,useSelector} from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
 const HomeScreen = (props) => {
     const keyword=props.match.params.keyword;
     const pageNumber=props.match.params.pageNumber||1;
@@ -14,11 +15,11 @@ const HomeScreen = (props) => {
     const {loading,error,products,pages,page}=productList;
     
     useEffect(()=>{
-        
        dispatch(listProducts(keyword,pageNumber))
     },[dispatch,keyword,pageNumber])
     return (
         <div>   
+            {!keyword&&<ProductCarousel/>}
             <h1>Latest Products</h1>
             {loading?(
                 <Loader/>
