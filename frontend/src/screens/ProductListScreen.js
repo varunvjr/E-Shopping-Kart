@@ -1,13 +1,15 @@
 import React,{useEffect} from 'react'
+import Paginate from '../components/Paginate';
 import {LinkContainer} from 'react-router-bootstrap';
 import {useDispatch,useSelector} from 'react-redux';
 import Message from "../components/Message";
 import {useHistory} from "react-router"
 import Loader from "../components/Loader"; 
-import {Table,Button,Row,Col} from "react-bootstrap";
+import {Table,Button,Row,Col,Pagination} from "react-bootstrap";
 import {listProducts,deleteProduct,createProduct} from "../actions/productActions"
 import {PRODUCT_CREATE_RESET} from "../constants/productConstants"
-const ProductListScreen = () => {
+const ProductListScreen = (props) => {
+    const pageNumber=props.match.params.pageNumber||1;
     const history=useHistory();
     const dispatch=useDispatch();
     const userLogin=useSelector(state=>state.userLogin);
@@ -15,7 +17,7 @@ const ProductListScreen = () => {
     const productDelete=useSelector(state=>state.productDelete);
     const productCreate=useSelector(state=>state.productCreate);
     const {loading:createLoading,error:createError,success:createSuccess,createdProduct}=productCreate;
-    const {loading:productLoading,error:productError,products}=productList;
+    const {loading:productLoading,error:productError,products,page,pages}=productList;
     const {loading:deleteLoading,success:deleteSuccess,error:deleteError}=productDelete;
     const {userInfo}=userLogin;
     useEffect(()=>{
@@ -26,11 +28,11 @@ const ProductListScreen = () => {
             if(createSuccess){
                 history.push(`/admin/product/${createdProduct._id}/edit`);
             }else{
-                dispatch(listProducts())
+                dispatch(listProducts('',pageNumber))
             }
         }
         
-    },[dispatch,history,userInfo,deleteSuccess,createSuccess,createdProduct])
+    },[dispatch,history,userInfo,deleteSuccess,createSuccess,createdProduct,pageNumber])
     const deleteHandler=(id)=>{
         if(window.confirm('Are you sure?')){
             dispatch(deleteProduct(id));
@@ -56,6 +58,7 @@ const ProductListScreen = () => {
         {createLoading&&<Loader/>}
         {createError&&<Message variant='danger'>{createError}</Message>}
         {productLoading?(<Loader/>):productError?(<Message variant="danger">{productError}</Message>):(
+            <>
             <Table striped bordered hover responsive className="table-sm">
                 <thead>
                     <tr>
@@ -79,6 +82,8 @@ const ProductListScreen = () => {
                     ))}
                 </tbody>       
             </Table>
+            <Paginate page={page} pages={pages} isAdmin={userInfo.isAdmin}/>
+            </>
         )}
         </Row>
             
