@@ -6,6 +6,7 @@ import {useDispatch,useSelector} from 'react-redux';
 import {listProductsDetails,createReview}  from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from '../components/Meta';
 import {PRODUCT_CREATE_REVIEW_RESET} from "../constants/productConstants"
 const ProductScreen = (props) => {
     const dispatch=useDispatch();
@@ -48,6 +49,7 @@ const ProductScreen = (props) => {
         ):(
             <>
             <Row>
+            <Meta title={product.name}/>
             <Col md={6}>
                 <Image src={product.image} alt={product.name} fluid/>
             </Col>

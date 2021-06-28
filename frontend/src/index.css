@@ -21,7 +21,7 @@ h2{
 .carousel-item.active{
   display: flex;
 }
-.carousel-caption{
+.carousel-caption div{
   position: absolute;
   top:0;
 }
@@ -29,8 +29,9 @@ h2{
   color: #fff;
 }
 .carousel img{
-  height: 300px;
+  height: 350px;
   padding: 30px;
-  margin: 40px;
+  margin: 60px;
+  margin-left: 30%;
   border-radius: 50%;
 }
