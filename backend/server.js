@@ -17,6 +17,7 @@ app.use(express.json());
 const PORT=process.env.PORT;
 connectDB();
 import cors from "cors";
+import morgan from 'morgan';
 app.use(cors());
 app.get("/",(req,res)=>{
     res.send("Backend")
@@ -24,7 +25,9 @@ app.get("/",(req,res)=>{
 app.use("/api/upload",uploadRouter);
 app.use("/api/products",productRouter);
 app.use("/api/users",userRouter);
-
+if(process.env.NODE_ENV=='development'){
+    app.use(morgan('dev'))
+}
 app.use("/api/orders",orderRouter);
 app.get("/api/config/stripe",(req,res)=>{res.status(200).json({
     clientId:process.env.STRIPE_CLIENT_ID

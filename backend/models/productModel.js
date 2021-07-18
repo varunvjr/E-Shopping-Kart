@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
-
-const reviewSchema=mongoose.Schema({
+const review=mongoose.Schema({
     name:{
         type:String,
-        required:true,
-        default:"Good Product"
+        required:true
     },
     rating:{
         type:Number,
@@ -48,7 +46,7 @@ const productSchema=mongoose.Schema({
         required:true,
         default:0
     },
-    totalreviews:[reviewSchema],
+    totalreviews:[review],
     reviews:{
         type:Number,
         default:0

@@ -29,7 +29,6 @@ const OrderListScreen = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>USER</th>
                         <th>DATE</th>
                         <th>TOTAL</th>
                         <th>PAID</th>
@@ -39,7 +38,7 @@ const OrderListScreen = () => {
                 </thead>         
                 <tbody>    
                 {allOrders&&allOrders.map((order=>
-                    <tr key={order._id}><td>{order._id}</td><td>{order.user.name}</td><td>{(order.updatedAt).toLowerCase().substring(0,10)}</td>
+                    <tr key={order._id}><td>{order._id}</td><td>{(order.updatedAt).toLowerCase().substring(0,10)}</td>
                     <td>${order.totalPrice}/-</td><td>{order.isPaid?(order.paidAt).substring(0,10):(<i className="fas fa-times" style={{color:"red"}}></i>)}</td><td>{order.isDelivered?(<i className="fas fa-check" style={{color:"green"}}></i>):(<i className="fas fa-times" style={{color:"red"}}></i>)}</td>
                     <td>
                     <LinkContainer to={`/order/${order._id}`}>
